@@ -1,4 +1,4 @@
-<script>
+
     // Function to detect OS
     function detectOS() {
         const userAgent = navigator.userAgent.toUpperCase();
@@ -67,4 +67,3 @@
 
     // Update screen size class on window resize
     window.addEventListener('resize', detectScreenSize);
-</script>
