@@ -1,159 +1,96 @@
-// Create a comprehensive device detection utility
-const DeviceDetector = {
-    // Initialize detection
-    init: function() {
-        this.userAgent = navigator.userAgent.toLowerCase();
-        this.platform = navigator.platform.toLowerCase();
-        this.applyClasses();
-    },
+// OS Detection Functions
+function isWindows() {
+    return navigator.platform.toUpperCase().indexOf('WIN') >= 0 ||
+           navigator.userAgent.toUpperCase().indexOf('WIN') >= 0;
+}
 
-    // Operating System Detection
-    isWindows: function() {
-        return this.userAgent.indexOf('windows') > -1;
-    },
+function isMac() {
+    return navigator.platform.toUpperCase().indexOf('MAC') >= 0 ||
+           navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+}
 
-    isMac: function() {
-        return this.userAgent.indexOf('mac') > -1;
-    },
+function isLinux() {
+    return navigator.platform.toUpperCase().indexOf('LINUX') >= 0 ||
+           navigator.userAgent.toUpperCase().indexOf('LINUX') >= 0;
+}
 
-    isLinux: function() {
-        return this.userAgent.indexOf('linux') > -1;
-    },
+function isAndroid() {
+    return navigator.userAgent.toUpperCase().indexOf('ANDROID') >= 0;
+}
 
-    isAndroid: function() {
-        return this.userAgent.indexOf('android') > -1;
-    },
+function isIOS() {
+    return ['IPHONE', 'IPAD', 'IPOD'].some(device => 
+        navigator.platform.toUpperCase().indexOf(device) >= 0 ||
+        navigator.userAgent.toUpperCase().indexOf(device) >= 0
+    );
+}
 
-    isIOS: function() {
-        return ['iphone', 'ipad', 'ipod'].some(device => 
-            this.userAgent.indexOf(device) > -1);
-    },
+// Device Type Detection Functions
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+        .test(navigator.userAgent);
+}
 
-    // Device Type Detection
-    isMobile: function() {
-        return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-            .test(this.userAgent);
-    },
+function isTablet() {
+    return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i
+        .test(navigator.userAgent);
+}
 
-    isTablet: function() {
-        return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i
-            .test(this.userAgent);
-    },
+function isDesktop() {
+    return !isMobile() && !isTablet();
+}
 
-    isDesktop: function() {
-        return !this.isMobile() && !this.isTablet();
-    },
+// Browser Detection Functions
+function isChrome() {
+    return navigator.userAgent.toUpperCase().indexOf('CHROME') >= 0 && !isEdge();
+}
 
-    // Browser Detection
-    isChrome: function() {
-        return this.userAgent.indexOf('chrome') > -1 && !this.isEdge();
-    },
+function isFirefox() {
+    return navigator.userAgent.toUpperCase().indexOf('FIREFOX') >= 0;
+}
 
-    isFirefox: function() {
-        return this.userAgent.indexOf('firefox') > -1;
-    },
+function isSafari() {
+    return navigator.userAgent.toUpperCase().indexOf('SAFARI') >= 0 && !isChrome();
+}
 
-    isSafari: function() {
-        return this.userAgent.indexOf('safari') > -1 && !this.isChrome();
-    },
+function isEdge() {
+    return navigator.userAgent.toUpperCase().indexOf('EDG') >= 0;
+}
 
-    isEdge: function() {
-        return this.userAgent.indexOf('edg') > -1;
-    },
+function isOpera() {
+    return navigator.userAgent.toUpperCase().indexOf('OP') >= 0;
+}
 
-    isOpera: function() {
-        return this.userAgent.indexOf('op') > -1;
-    },
+function isIE() {
+    return navigator.userAgent.toUpperCase().indexOf('TRIDENT') >= 0;
+}
 
-    isIE: function() {
-        return this.userAgent.indexOf('trident') > -1;
-    },
+// Screen Size Function
+function getScreenSize() {
+    const width = window.innerWidth;
+    if (width < 576) return 'xs';
+    if (width < 768) return 'sm';
+    if (width < 992) return 'md';
+    if (width < 1200) return 'lg';
+    return 'xl';
+}
 
-    // Screen Size Detection
-    getScreenSize: function() {
-        const width = window.innerWidth;
-        if (width < 576) return 'xs';
-        if (width < 768) return 'sm';
-        if (width < 992) return 'md';
-        if (width < 1200) return 'lg';
-        return 'xl';
-    },
+// Apply classes based on device detection
+if (isWindows()) document.body.classList.add('is-windows');
+if (isMac()) document.body.classList.add('is-mac');
+if (isLinux()) document.body.classList.add('is-linux');
+if (isAndroid()) document.body.classList.add('is-android');
+if (isIOS()) document.body.classList.add('is-ios');
 
-    // Apply all detected classes to body
-    applyClasses: function() {
-        const classes = [];
+if (isMobile()) document.body.classList.add('is-mobile');
+if (isTablet()) document.body.classList.add('is-tablet');
+if (isDesktop()) document.body.classList.add('is-desktop');
 
-        // OS Classes
-        if (this.isWindows()) classes.push('is-windows');
-        if (this.isMac()) classes.push('is-mac');
-        if (this.isLinux()) classes.push('is-linux');
-        if (this.isAndroid()) classes.push('is-android');
-        if (this.isIOS()) classes.push('is-ios');
+if (isChrome()) document.body.classList.add('is-chrome');
+if (isFirefox()) document.body.classList.add('is-firefox');
+if (isSafari()) document.body.classList.add('is-safari');
+if (isEdge()) document.body.classList.add('is-edge');
+if (isOpera()) document.body.classList.add('is-opera');
+if (isIE()) document.body.classList.add('is-ie');
 
-        // Device Type Classes
-        if (this.isMobile()) classes.push('is-mobile');
-        if (this.isTablet()) classes.push('is-tablet');
-        if (this.isDesktop()) classes.push('is-desktop');
-
-        // Browser Classes
-        if (this.isChrome()) classes.push('is-chrome');
-        if (this.isFirefox()) classes.push('is-firefox');
-        if (this.isSafari()) classes.push('is-safari');
-        if (this.isEdge()) classes.push('is-edge');
-        if (this.isOpera()) classes.push('is-opera');
-        if (this.isIE()) classes.push('is-ie');
-
-        // Screen Size Class
-        classes.push(`screen-${this.getScreenSize()}`);
-
-        // Apply all classes to body
-        document.body.classList.add(...classes);
-
-        // Add data attributes for more specific styling
-        document.documentElement.setAttribute('data-device-type', 
-            this.isMobile() ? 'mobile' : this.isTablet() ? 'tablet' : 'desktop');
-        document.documentElement.setAttribute('data-os', 
-            this.isWindows() ? 'windows' : 
-            this.isMac() ? 'mac' : 
-            this.isLinux() ? 'linux' : 
-            this.isAndroid() ? 'android' : 
-            this.isIOS() ? 'ios' : 'unknown');
-    },
-
-    // Get detailed device info
-    getDeviceInfo: function() {
-        return {
-            userAgent: this.userAgent,
-            platform: this.platform,
-            deviceType: this.isMobile() ? 'Mobile' : this.isTablet() ? 'Tablet' : 'Desktop',
-            operatingSystem: this.isWindows() ? 'Windows' : 
-                           this.isMac() ? 'MacOS' : 
-                           this.isLinux() ? 'Linux' : 
-                           this.isAndroid() ? 'Android' : 
-                           this.isIOS() ? 'iOS' : 'Unknown',
-            browser: this.isChrome() ? 'Chrome' : 
-                    this.isFirefox() ? 'Firefox' : 
-                    this.isSafari() ? 'Safari' : 
-                    this.isEdge() ? 'Edge' : 
-                    this.isOpera() ? 'Opera' : 
-                    this.isIE() ? 'Internet Explorer' : 'Unknown',
-            screenSize: this.getScreenSize(),
-            windowWidth: window.innerWidth,
-            windowHeight: window.innerHeight,
-            pixelRatio: window.devicePixelRatio || 1
-        };
-    }
-};
-
-// Initialize on DOM content loaded
-document.addEventListener('DOMContentLoaded', () => {
-    DeviceDetector.init();
-    
-    // Log device info to console (optional)
-    console.log('Device Information:', DeviceDetector.getDeviceInfo());
-});
-
-// Update classes on resize (optional)
-window.addEventListener('resize', () => {
-    DeviceDetector.applyClasses();
-});
+document.body.classList.add(`screen-${getScreenSize()}`);
