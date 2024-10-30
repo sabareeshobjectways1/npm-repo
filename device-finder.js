@@ -1,96 +1,70 @@
-// OS Detection Functions
-function isWindows() {
-    return navigator.platform.toUpperCase().indexOf('WIN') >= 0 ||
-           navigator.userAgent.toUpperCase().indexOf('WIN') >= 0;
-}
+<script>
+    // Function to detect OS
+    function detectOS() {
+        const userAgent = navigator.userAgent.toUpperCase();
+        const platform = navigator.platform.toUpperCase();
 
-function isMac() {
-    return navigator.platform.toUpperCase().indexOf('MAC') >= 0 ||
-           navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
-}
+        if (platform.includes('MAC') || userAgent.includes('MAC')) {
+            document.body.classList.add('is-mac');
+        } else if (platform.includes('WIN') || userAgent.includes('WINDOWS')) {
+            document.body.classList.add('is-windows');
+        } else if (platform.includes('LINUX') || userAgent.includes('LINUX')) {
+            document.body.classList.add('is-linux');
+        } else if (userAgent.includes('ANDROID')) {
+            document.body.classList.add('is-android');
+        } else if (userAgent.includes('IPHONE') || userAgent.includes('IPAD') || userAgent.includes('IPOD') || userAgent.includes('IOS')) {
+            document.body.classList.add('is-ios');
+        }
+    }
 
-function isLinux() {
-    return navigator.platform.toUpperCase().indexOf('LINUX') >= 0 ||
-           navigator.userAgent.toUpperCase().indexOf('LINUX') >= 0;
-}
+    // Function to detect device type
+    function detectDeviceType() {
+        const userAgent = navigator.userAgent.toUpperCase();
+        if (/MOBILE/.test(userAgent)) {
+            document.body.classList.add('is-mobile');
+        } else if (/TABLET/.test(userAgent) || (userAgent.includes('IPAD'))) {
+            document.body.classList.add('is-tablet');
+        } else {
+            document.body.classList.add('is-desktop');
+        }
+    }
 
-function isAndroid() {
-    return navigator.userAgent.toUpperCase().indexOf('ANDROID') >= 0;
-}
+    // Function to detect browser
+    function detectBrowser() {
+        const userAgent = navigator.userAgent.toUpperCase();
+        if (userAgent.includes('CHROME') && !userAgent.includes('EDGE')) {
+            document.body.classList.add('is-chrome');
+        } else if (userAgent.includes('FIREFOX')) {
+            document.body.classList.add('is-firefox');
+        } else if (userAgent.includes('SAFARI') && !userAgent.includes('CHROME')) {
+            document.body.classList.add('is-safari');
+        }
+    }
 
-function isIOS() {
-    return ['IPHONE', 'IPAD', 'IPOD'].some(device => 
-        navigator.platform.toUpperCase().indexOf(device) >= 0 ||
-        navigator.userAgent.toUpperCase().indexOf(device) >= 0
-    );
-}
+    // Function to detect screen size
+    function detectScreenSize() {
+        const width = window.innerWidth;
+        document.body.classList.remove('screen-xs', 'screen-sm', 'screen-md', 'screen-lg', 'screen-xl');
 
-// Device Type Detection Functions
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-        .test(navigator.userAgent);
-}
+        if (width < 576) {
+            document.body.classList.add('screen-xs');
+        } else if (width >= 576 && width < 768) {
+            document.body.classList.add('screen-sm');
+        } else if (width >= 768 && width < 992) {
+            document.body.classList.add('screen-md');
+        } else if (width >= 992 && width < 1200) {
+            document.body.classList.add('screen-lg');
+        } else if (width >= 1200) {
+            document.body.classList.add('screen-xl');
+        }
+    }
 
-function isTablet() {
-    return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i
-        .test(navigator.userAgent);
-}
+    // Run all detection functions
+    detectOS();
+    detectDeviceType();
+    detectBrowser();
+    detectScreenSize();
 
-function isDesktop() {
-    return !isMobile() && !isTablet();
-}
-
-// Browser Detection Functions
-function isChrome() {
-    return navigator.userAgent.toUpperCase().indexOf('CHROME') >= 0 && !isEdge();
-}
-
-function isFirefox() {
-    return navigator.userAgent.toUpperCase().indexOf('FIREFOX') >= 0;
-}
-
-function isSafari() {
-    return navigator.userAgent.toUpperCase().indexOf('SAFARI') >= 0 && !isChrome();
-}
-
-function isEdge() {
-    return navigator.userAgent.toUpperCase().indexOf('EDG') >= 0;
-}
-
-function isOpera() {
-    return navigator.userAgent.toUpperCase().indexOf('OP') >= 0;
-}
-
-function isIE() {
-    return navigator.userAgent.toUpperCase().indexOf('TRIDENT') >= 0;
-}
-
-// Screen Size Function
-function getScreenSize() {
-    const width = window.innerWidth;
-    if (width < 576) return 'xs';
-    if (width < 768) return 'sm';
-    if (width < 992) return 'md';
-    if (width < 1200) return 'lg';
-    return 'xl';
-}
-
-// Apply classes based on device detection
-if (isWindows()) document.body.classList.add('is-windows');
-if (isMac()) document.body.classList.add('is-mac');
-if (isLinux()) document.body.classList.add('is-linux');
-if (isAndroid()) document.body.classList.add('is-android');
-if (isIOS()) document.body.classList.add('is-ios');
-
-if (isMobile()) document.body.classList.add('is-mobile');
-if (isTablet()) document.body.classList.add('is-tablet');
-if (isDesktop()) document.body.classList.add('is-desktop');
-
-if (isChrome()) document.body.classList.add('is-chrome');
-if (isFirefox()) document.body.classList.add('is-firefox');
-if (isSafari()) document.body.classList.add('is-safari');
-if (isEdge()) document.body.classList.add('is-edge');
-if (isOpera()) document.body.classList.add('is-opera');
-if (isIE()) document.body.classList.add('is-ie');
-
-document.body.classList.add(`screen-${getScreenSize()}`);
+    // Update screen size class on window resize
+    window.addEventListener('resize', detectScreenSize);
+</script>
